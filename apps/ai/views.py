@@ -3,12 +3,23 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from openai import OpenAI
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
+def get_openai_client():
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        return None
+    return OpenAI(api_key=api_key)
 
 class AskAIView(APIView):
     def post(self, request):
         question = request.data.get("question")
+
+        client = get_openai_client()
+
+        # ✅ Safety check
+        if client is None:
+            return Response({
+                "error": "OpenAI API key not configured"
+            }, status=500)
 
         prompt = f"""
         You are an AI assistant for Irfan's portfolio.

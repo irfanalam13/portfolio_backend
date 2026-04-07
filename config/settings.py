@@ -8,26 +8,31 @@ import dj_database_url
 
 DEBUG = config("DEBUG", default=False, cast=bool)
 
-# -------------------------
-# ✅ ALLOWED HOSTS
-# -------------------------
 
 ALLOWED_HOSTS = config(
     "ALLOWED_HOSTS",
     default="127.0.0.1,localhost",
-    cast=lambda v: [s.strip() for s in v.split(",")]
+    cast=lambda v: [s.strip() for s in v.split(",") if s.strip()]
 )
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+else:
+    CORS_ALLOWED_ORIGINS = config(
+        "CORS_ALLOWED_ORIGINS",
+        default="",
+        cast=lambda v: [s.strip() for s in v.split(",") if s.strip()]
+    )
 
-# -------------------------
-# ✅ CORS CONFIG
-# -------------------------
-CORS_ALLOWED_ORIGINS = config(
-    "CORS_ALLOWED_ORIGINS",
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = config(
+    "CSRF_TRUSTED_ORIGINS",
     default="",
     cast=lambda v: [s.strip() for s in v.split(",") if s.strip()]
 )
+
 CORS_ALLOW_CREDENTIALS = True
 
 
@@ -37,8 +42,26 @@ CSRF_TRUSTED_ORIGINS = config(
     cast=lambda v: [s.strip() for s in v.split(",") if s.strip()]
 )
 
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+# =========================
+# 🔐 SECURITY (PRODUCTION)
+# =========================
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True  # force HTTPS
+
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+
+    X_FRAME_OPTIONS = "DENY"
+else:
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
 
 # ✅ BASE DIR (must be first)
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -47,15 +70,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 STATIC_URL = "/static/"
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),  # your custom static folder
-]
+    os.path.join(BASE_DIR, "static"),
+] if os.path.exists(os.path.join(BASE_DIR, "static")) else []
 
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # collected files
 
 
 # 🔐 SECURITY
-SECRET_KEY = config("SECRET_KEY")
-
+SECRET_KEY = config("SECRET_KEY", default="dev-secret-key")
 
 # LOGGING = {
 #     "version": 1,
@@ -140,18 +162,17 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 
 
-ENV = config("ENV", default="development")
 
+
+ENV = config("ENV", default="development")
 
 DATABASES = {
     "default": dj_database_url.config(
-        default=config("DATABASE_URL"),
+        default=config("DATABASE_URL", default=""),
         conn_max_age=600,
-        ssl_require=True
+        ssl_require=(ENV == "production")
     )
 }
-
-
 # DATABASES = {
 #     "default": dj_database_url.config(
 #         default=os.environ.get("DATABASE_URL")
@@ -166,7 +187,7 @@ AUTH_USER_MODEL = "auth.User"  # update later if custom
 # 📁 MEDIA FILES
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # 🧠 DRF CONFIG
 REST_FRAMEWORK = {
