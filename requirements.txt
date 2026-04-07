@@ -1,0 +1,16 @@
+django 
+djangorestframework 
+psycopg2 
+pillow 
+django-filter
+psycopg2-binary 
+python-dotenv 
+whitenoise 
+django-cors-headers
+requests
+openai
+django-jazzmin
+python-decouple
+dj-database-url
+drf_yasg
+
