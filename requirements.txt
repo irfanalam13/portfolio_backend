@@ -2,6 +2,7 @@ django
 gunicorn
 djangorestframework 
 django-filter
+pillow 
 psycopg2-binary 
 python-dotenv 
 whitenoise 
