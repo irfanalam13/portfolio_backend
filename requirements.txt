@@ -1,6 +1,5 @@
 django 
 djangorestframework 
-psycopg2 
 pillow 
 django-filter
 psycopg2-binary 
