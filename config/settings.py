@@ -11,6 +11,7 @@ DEBUG = config("DEBUG", default=False, cast=bool)
 # -------------------------
 # ✅ ALLOWED HOSTS
 # -------------------------
+
 ALLOWED_HOSTS = config(
     "ALLOWED_HOSTS",
     default="127.0.0.1,localhost",
@@ -22,22 +23,18 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # -------------------------
 # ✅ CORS CONFIG
 # -------------------------
-if DEBUG:
-    # 🖥️ Development
-    CORS_ALLOW_ALL_ORIGINS = True
-else:
-    # ☁️ Production
-    CORS_ALLOWED_ORIGINS = config(
-        "CORS_ALLOWED_ORIGINS",
-        cast=lambda v: [s.strip() for s in v.split(",")]
-    )
-
+CORS_ALLOWED_ORIGINS = config(
+    "CORS_ALLOWED_ORIGINS",
+    default="",
+    cast=lambda v: [s.strip() for s in v.split(",") if s.strip()]
+)
 CORS_ALLOW_CREDENTIALS = True
 
 
 CSRF_TRUSTED_ORIGINS = config(
     "CSRF_TRUSTED_ORIGINS",
-    cast=lambda v: [s.strip() for s in v.split(",")]
+    default="",
+    cast=lambda v: [s.strip() for s in v.split(",") if s.strip()]
 )
 
 CSRF_COOKIE_SECURE = True
@@ -57,10 +54,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # collected files
 
 
 # 🔐 SECURITY
-SECRET_KEY = os.environ.get("SECRET_KEY", "fallback-secret")
-
-
-
+SECRET_KEY = config("SECRET_KEY")
 
 
 # LOGGING = {
@@ -148,22 +142,14 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 ENV = config("ENV", default="development")
 
-if ENV == "production":
-    DATABASES = {
-        "default": dj_database_url.config(conn_max_age=600, ssl_require=True)
-    }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": config("DB_NAME"),
-            "USER": config("DB_USER"),
-            "PASSWORD": config("DB_PASSWORD"),
-            "HOST": "localhost",
-            "PORT": "5432",
-        }
-    }
 
+DATABASES = {
+    "default": dj_database_url.config(
+        default=config("DATABASE_URL"),
+        conn_max_age=600,
+        ssl_require=True
+    )
+}
 
 
 # DATABASES = {
