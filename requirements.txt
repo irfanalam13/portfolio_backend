@@ -1,4 +1,5 @@
 django 
+gunicorn
 djangorestframework 
 pillow 
 django-filter
