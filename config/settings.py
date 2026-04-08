@@ -66,14 +66,6 @@ else:
 # ✅ BASE DIR (must be first)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# ✅ STATIC FILES
-STATIC_URL = "/static/"
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-] if os.path.exists(os.path.join(BASE_DIR, "static")) else []
-
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # collected files
 
 
 # 🔐 SECURITY
@@ -153,7 +145,6 @@ TEMPLATES = [
     },
 ]
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # ⚡ WSGI
 WSGI_APPLICATION = "config.wsgi.application"
@@ -187,6 +178,17 @@ AUTH_USER_MODEL = "auth.User"  # update later if custom
 # 📁 MEDIA FILES
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+# ✅ STATIC FILES
+STATIC_URL = "/static/"
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+] if os.path.exists(os.path.join(BASE_DIR, "static")) else []
+
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # collected files
+
+
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # 🧠 DRF CONFIG
