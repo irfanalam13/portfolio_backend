@@ -112,9 +112,10 @@ INSTALLED_APPS = [
 # =====================================================
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # 👈 MUST be here (top)
+
+    "corsheaders.middleware.CorsMiddleware",
 
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -124,7 +125,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-
 
 # 🌐 ROOT URL
 ROOT_URLCONF = "config.urls"
@@ -190,8 +190,7 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # collected files
 
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 # 🧠 DRF CONFIG
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
