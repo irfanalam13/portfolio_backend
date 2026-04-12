@@ -3,6 +3,20 @@ from decouple import config
 import dj_database_url
 
 
+# settings.py
+
+import os
+import cloudinary
+
+# 🔐 Cloudinary config (use ENV variables - BEST PRACTICE)
+cloudinary.config(
+    cloud_name=os.getenv("CLOUD_NAME"),
+    api_key=os.getenv("API_KEY"),
+    api_secret=os.getenv("API_SECRET"),
+)
+
+
+
 OPENAI_API_KEY = config("OPENAI_API_KEY", default=None)
 
 DEBUG = False
@@ -74,6 +88,8 @@ INSTALLED_APPS = [
     "corsheaders",
     "django_filters",
     "drf_yasg",
+    "cloudinary",
+    "cloudinary_storage",
 
     # Local apps
     "apps.core",
@@ -159,10 +175,17 @@ DATABASES = {
 AUTH_USER_MODEL = "auth.User"  # update later if custom
 
 
+# ================================
+# ☁️ MEDIA FILES (Cloudinary)
+# ================================
 
-# 📁 MEDIA FILES
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
+# ❌ DO NOT use these with Cloudinary
+# MEDIA_URL = "/media/"
+# MEDIA_ROOT = BASE_DIR / "media"
+
+
 
 # ✅ STATIC FILES
 STATIC_URL = "/static/"

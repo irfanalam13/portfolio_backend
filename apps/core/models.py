@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from cloudinary.models import CloudinaryField
 
 
 class BaseModel(models.Model):
@@ -16,7 +17,14 @@ class SEO(BaseModel):
     title = models.CharField(max_length=255)
     description = models.TextField()
     keywords = models.CharField(max_length=500, blank=True)
-    og_image = models.ImageField(upload_to="seo/", blank=True, null=True)
+
+    # ✅ Use Cloudinary
+    og_image = CloudinaryField(
+        'image',
+        folder='portfolio/seo',
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return self.title
@@ -24,11 +32,15 @@ class SEO(BaseModel):
 
 # 🔥 HERO IMAGE (SINGLE USE)
 class HeroImage(BaseModel):
-    image = models.ImageField(upload_to="hero/")
+    image = CloudinaryField(
+        'image',
+        folder='portfolio/hero/profile'
+    )
+
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.image.name.split("/")[-1]
+        return str(self.image)
 
 
 # 🔥 HERO CONTENT
@@ -48,7 +60,6 @@ class HomePage(BaseModel):
     hero = models.ForeignKey(HeroContent, on_delete=models.SET_NULL, null=True)
     seo = models.ForeignKey(SEO, on_delete=models.SET_NULL, null=True)
 
-    # ✅ Only ONE image allowed
     hero_image = models.ForeignKey(
         HeroImage,
         on_delete=models.SET_NULL,
@@ -58,4 +69,3 @@ class HomePage(BaseModel):
 
     def __str__(self):
         return "Homepage"
-    
