@@ -4,14 +4,11 @@ import dj_database_url
 
 
 OPENAI_API_KEY = config("OPENAI_API_KEY", default=None)
-DEBUG = config("DEBUG", default=False, cast=bool)
 
+DEBUG = False
 
-ALLOWED_HOSTS = config(
-    "ALLOWED_HOSTS",
-    default="127.0.0.1,localhost,.up.railway.app",
-    cast=lambda v: [s.strip() for s in v.split(",") if s.strip()]
-)
+ALLOWED_HOSTS = ["irfanalam.com.np"]  # change later to domain
+
 
 
 CORS_ALLOW_CREDENTIALS = True
