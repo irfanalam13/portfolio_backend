@@ -190,7 +190,8 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # collected files
 
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 # 🧠 DRF CONFIG
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
