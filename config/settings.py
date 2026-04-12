@@ -174,7 +174,12 @@ STATICFILES_DIRS = [BASE_DIR / "static"] if (BASE_DIR / "static").exists() else 
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+print("STATIC ROOT:", STATIC_ROOT)
+
+
 # 🧠 DRF CONFIG
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
