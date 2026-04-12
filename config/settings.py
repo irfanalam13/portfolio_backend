@@ -178,20 +178,16 @@ AUTH_USER_MODEL = "auth.User"  # update later if custom
 
 # 📁 MEDIA FILES
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = BASE_DIR / "media"
 
 # ✅ STATIC FILES
 STATIC_URL = "/static/"
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-] if os.path.exists(os.path.join(BASE_DIR, "static")) else []
+STATICFILES_DIRS = [BASE_DIR / "static"] if (BASE_DIR / "static").exists() else []
 
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # collected files
-
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
 # 🧠 DRF CONFIG
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
