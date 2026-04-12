@@ -197,7 +197,6 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-print("STATIC ROOT:", STATIC_ROOT)
 
 
 # 🧠 DRF CONFIG
