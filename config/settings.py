@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 from decouple import config
 import dj_database_url
@@ -11,19 +10,10 @@ DEBUG = config("DEBUG", default=False, cast=bool)
 
 ALLOWED_HOSTS = config(
     "ALLOWED_HOSTS",
-    default="127.0.0.1,localhost",
+    default="127.0.0.1,localhost,.up.railway.app",
     cast=lambda v: [s.strip() for s in v.split(",") if s.strip()]
 )
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-if DEBUG:
-    CORS_ALLOW_ALL_ORIGINS = True
-else:
-    CORS_ALLOWED_ORIGINS = config(
-        "CORS_ALLOWED_ORIGINS",
-        default="",
-        cast=lambda v: [s.strip() for s in v.split(",") if s.strip()]
-    )
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -33,14 +23,7 @@ CSRF_TRUSTED_ORIGINS = config(
     cast=lambda v: [s.strip() for s in v.split(",") if s.strip()]
 )
 
-CORS_ALLOW_CREDENTIALS = True
 
-
-CSRF_TRUSTED_ORIGINS = config(
-    "CSRF_TRUSTED_ORIGINS",
-    default="",
-    cast=lambda v: [s.strip() for s in v.split(",") if s.strip()]
-)
 
 # =========================
 # 🔐 SECURITY (PRODUCTION)
@@ -158,11 +141,16 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 ENV = config("ENV", default="development")
 
+DATABASE_URL = config("DATABASE_URL", default=None)
+
+if not DATABASE_URL:
+    raise Exception("❌ DATABASE_URL is not set")
+
 DATABASES = {
-    "default": dj_database_url.config(
-        default=config("DATABASE_URL", default=""),
+    "default": dj_database_url.parse(
+        DATABASE_URL,
         conn_max_age=600,
-        ssl_require=(ENV == "production")
+        ssl_require=(ENV == "production"),
     )
 }
 # DATABASES = {
