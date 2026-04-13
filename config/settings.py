@@ -19,19 +19,25 @@ cloudinary.config(
 
 OPENAI_API_KEY = config("OPENAI_API_KEY", default=None)
 
-DEBUG = False
+DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = ["irfanalam.com.np"]  # change later to domain
-
-
-
-CORS_ALLOW_CREDENTIALS = True
+ALLOWED_HOSTS = config(
+    "ALLOWED_HOSTS",
+    default="irfanalam.com.np",
+    cast=lambda v: [s.strip() for s in v.split(",")]
+)
 
 CSRF_TRUSTED_ORIGINS = config(
     "CSRF_TRUSTED_ORIGINS",
-    default="",
-    cast=lambda v: [s.strip() for s in v.split(",") if s.strip()]
+    default="https://irfanalam.com.np",
+    cast=lambda v: [s.strip() for s in v.split(",")]
 )
+
+# CSRF_TRUSTED_ORIGINS = config(
+#     "CSRF_TRUSTED_ORIGINS",
+#     default="",
+#     cast=lambda v: [s.strip() for s in v.split(",") if s.strip()]
+# )
 
 
 
