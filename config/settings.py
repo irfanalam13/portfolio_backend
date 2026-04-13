@@ -5,14 +5,14 @@ import dj_database_url
 
 # settings.py
 
-import os
 import cloudinary
 
 # 🔐 Cloudinary config (use ENV variables - BEST PRACTICE)
+
 cloudinary.config(
-    cloud_name=os.getenv("CLOUD_NAME"),
-    api_key=os.getenv("API_KEY"),
-    api_secret=os.getenv("API_SECRET"),
+    cloud_name=config("CLOUDINARY_CLOUD_NAME"),
+    api_key=config("CLOUDINARY_API_KEY"),
+    api_secret=config("CLOUDINARY_API_SECRET"),
 )
 
 
