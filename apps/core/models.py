@@ -3,6 +3,7 @@ from django.db import models
 from cloudinary.models import CloudinaryField
 
 
+# 🔥 BASE MODEL (Reusable)
 class BaseModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -18,7 +19,6 @@ class SEO(BaseModel):
     description = models.TextField()
     keywords = models.CharField(max_length=500, blank=True)
 
-    # ✅ Use Cloudinary
     og_image = CloudinaryField(
         'image',
         folder='portfolio/seo',
@@ -30,8 +30,22 @@ class SEO(BaseModel):
         return self.title
 
 
-# 🔥 HERO IMAGE (SINGLE USE)
-class HeroImage(BaseModel):
+# 🔥 HERO BACKGROUND IMAGES (MULTIPLE)
+class HeroBackground(BaseModel):
+    image = CloudinaryField(
+        'image',
+        folder='portfolio/hero/background'
+    )
+
+    is_active = models.BooleanField(default=True)
+    order = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"Background {self.id}"
+
+
+# 🔥 PROFILE IMAGE (SINGLE USE)
+class ProfileImage(BaseModel):
     image = CloudinaryField(
         'image',
         folder='portfolio/hero/profile'
@@ -40,7 +54,7 @@ class HeroImage(BaseModel):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return str(self.image)
+        return f"Profile {self.id}"
 
 
 # 🔥 HERO CONTENT
@@ -55,13 +69,24 @@ class HeroContent(BaseModel):
         return self.headline
 
 
-# 🔥 HOMEPAGE (ONLY ONE IMAGE)
+# 🔥 HOMEPAGE CONFIG (MAIN CONTROL)
 class HomePage(BaseModel):
-    hero = models.ForeignKey(HeroContent, on_delete=models.SET_NULL, null=True)
-    seo = models.ForeignKey(SEO, on_delete=models.SET_NULL, null=True)
+    hero = models.ForeignKey(
+        HeroContent,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
 
-    hero_image = models.ForeignKey(
-        HeroImage,
+    seo = models.ForeignKey(
+        SEO,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+
+    profile_image = models.ForeignKey(
+        ProfileImage,
         on_delete=models.SET_NULL,
         null=True,
         blank=True

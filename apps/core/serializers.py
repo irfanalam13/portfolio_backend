@@ -1,5 +1,11 @@
 from rest_framework import serializers
-from .models import SEO, HeroImage, HeroContent, HomePage
+from .models import (
+    SEO,
+    HeroBackground,
+    ProfileImage,
+    HeroContent,
+    HomePage
+)
 
 
 # 🔥 SEO
@@ -14,16 +20,28 @@ class SEOSerializer(serializers.ModelSerializer):
         return obj.og_image.url if obj.og_image else None
 
 
-# 🔥 HERO IMAGE
-class HeroImageSerializer(serializers.ModelSerializer):
+# 🔥 HERO BACKGROUND (MULTIPLE)
+class HeroBackgroundSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
 
     class Meta:
-        model = HeroImage
+        model = HeroBackground
+        fields = ["id", "image_url", "order", "is_active"]
+
+    def get_image_url(self, obj):
+        return obj.image.url if obj.image else None
+
+
+# 🔥 PROFILE IMAGE (SINGLE)
+class ProfileImageSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ProfileImage
         fields = ["id", "image_url", "is_active"]
 
     def get_image_url(self, obj):
-        return obj.image.url
+        return obj.image.url if obj.image else None
 
 
 # 🔥 HERO CONTENT
@@ -33,17 +51,25 @@ class HeroContentSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-# 🔥 HOMEPAGE
+# 🔥 HOMEPAGE (MAIN API)
 class HomePageSerializer(serializers.ModelSerializer):
-    hero = HeroContentSerializer()
-    seo = SEOSerializer()
+    hero = HeroContentSerializer(read_only=True)
+    seo = SEOSerializer(read_only=True)
+    profile_image = ProfileImageSerializer(read_only=True)
 
-    active_hero_images = serializers.SerializerMethodField()
+    background_images = serializers.SerializerMethodField()
 
     class Meta:
         model = HomePage
-        fields = ["id", "hero", "seo", "active_hero_images"]
+        fields = [
+            "id",
+            "hero",
+            "seo",
+            "profile_image",
+            "background_images",
+        ]
 
-    def get_active_hero_images(self, obj):
-        images = HeroImage.objects.filter(is_active=True)
-        return HeroImageSerializer(images, many=True).data
+    def get_background_images(self, obj):
+        images = HeroBackground.objects.filter(is_active=True).order_by("order")
+        return HeroBackgroundSerializer(images, many=True).data
+    

@@ -58,10 +58,15 @@ urlpatterns = [
     path("api/projects/", include("apps.projects.urls")),
     path("api/blogs/", include("apps.blog.urls")),
     path("api/skills/", include("apps.skills.urls")),
-    path("api/problem_solving", include("apps.problem_solver.urls")),  # problems + solutions
+    path("api/problem_solving/", include("apps.problem_solver.urls")),  # problems + solutions
     path("api/contacts/", include("apps.contact.urls")),
     path("api/activity/", include("apps.activity.urls")),
     path("api/ai/", include("apps.ai.urls")),
+    path("api/education/", include("apps.education.urls")),
+    path("api/experience/", include("apps.experience.urls")),
+    path("api/", include("apps.achievements.urls")),
+    path("api/timeline/", include("apps.timeline.urls")),
+
 ]
 
 

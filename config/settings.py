@@ -33,6 +33,12 @@ CSRF_TRUSTED_ORIGINS = config(
     cast=lambda v: [s.strip() for s in v.split(",")]
 )
 
+CORS_ALLOWED_ORIGINS = config(
+    "CORS_ALLOWED_ORIGINS",
+    default="http://localhost:3000,http://127.0.0.1:3000,https://irfanalam.com.np",
+    cast=lambda v: [s.strip() for s in v.split(",") if s.strip()],
+)
+
 # CSRF_TRUSTED_ORIGINS = config(
 #     "CSRF_TRUSTED_ORIGINS",
 #     default="",
@@ -106,6 +112,12 @@ INSTALLED_APPS = [
     "apps.contact",
     "apps.activity",
     "apps.ai",
+    "apps.achievements",
+    "apps.education",
+    "apps.experience",
+    "apps.timeline",
+
+
 ]
 
 # =====================================================
@@ -185,7 +197,17 @@ AUTH_USER_MODEL = "auth.User"  # update later if custom
 # ☁️ MEDIA FILES (Cloudinary)
 # ================================
 
-DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+# Django 5.1+ removed DEFAULT_FILE_STORAGE / STATICFILES_STORAGE in favour of
+# the unified STORAGES dict. On Django 6 the legacy settings are ignored, so
+# media (Cloudinary) and static (WhiteNoise) backends MUST be declared here.
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # ❌ DO NOT use these with Cloudinary
 # MEDIA_URL = "/media/"
@@ -201,15 +223,14 @@ STATICFILES_DIRS = [BASE_DIR / "static"] if (BASE_DIR / "static").exists() else 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-
 
 # 🧠 DRF CONFIG
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.AllowAny"
     ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 20,
 }
 
 # 🌍 TIMEZONE

@@ -1,25 +1,50 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import SEO, HeroImage, HeroContent, HomePage
+from .models import (
+    SEO,
+    HeroBackground,
+    ProfileImage,
+    HeroContent,
+    HomePage
+)
 
 
-# 🔥 HERO IMAGE ADMIN (WITH PREVIEW)
-@admin.register(HeroImage)
-class HeroImageAdmin(admin.ModelAdmin):
-    list_display = ["id", "preview", "is_active", "created_at"]
-    list_editable = ["is_active"]
+# 🔥 HERO BACKGROUND ADMIN (MULTIPLE IMAGES)
+@admin.register(HeroBackground)
+class HeroBackgroundAdmin(admin.ModelAdmin):
+    list_display = ["id", "preview", "order", "is_active", "created_at"]
+    list_editable = ["order", "is_active"]
     list_filter = ["is_active", "created_at"]
-    search_fields = ["image"]
+    search_fields = ["id"]
     readonly_fields = ["preview"]
 
     def preview(self, obj):
         if obj.image:
             return format_html(
-                '<img src="{}" style="height:50px; border-radius:5px;" />',
+                '<img src="{}" style="height:50px; border-radius:6px;" />',
                 obj.image.url
             )
         return "-"
-    preview.short_description = "Image Preview"
+    preview.short_description = "Preview"
+
+
+# 🔥 PROFILE IMAGE ADMIN (SINGLE IMAGE)
+@admin.register(ProfileImage)
+class ProfileImageAdmin(admin.ModelAdmin):
+    list_display = ["id", "preview", "is_active", "created_at"]
+    list_editable = ["is_active"]
+    list_filter = ["is_active", "created_at"]
+    readonly_fields = ["preview"]
+    search_fields = ["id", "image"]   # ✅ ADD THIS LINE
+
+    def preview(self, obj):
+        if obj.image:
+            return format_html(
+                '<img src="{}" style="height:60px; border-radius:50%;" />',
+                obj.image.url
+            )
+        return "-"
+    preview.short_description = "Profile Preview"
 
 
 # 🔥 HERO CONTENT ADMIN
@@ -40,15 +65,16 @@ class SEOAdmin(admin.ModelAdmin):
     def preview(self, obj):
         if obj.og_image:
             return format_html(
-                '<img src="{}" style="height:50px; border-radius:5px;" />',
+                '<img src="{}" style="height:50px; border-radius:6px;" />',
                 obj.og_image.url
             )
         return "-"
     preview.short_description = "OG Image"
 
 
-# 🔥 HOMEPAGE ADMIN (INLINE CONTROL)
+# 🔥 HOMEPAGE ADMIN (MAIN CONTROL PANEL)
 @admin.register(HomePage)
 class HomePageAdmin(admin.ModelAdmin):
-    list_display = ["id", "hero", "hero_image", "seo"]
-    autocomplete_fields = ["hero", "hero_image", "seo"]
+    list_display = ["id", "hero", "profile_image", "seo", "created_at"]
+    autocomplete_fields = ["hero", "profile_image", "seo"]
+
