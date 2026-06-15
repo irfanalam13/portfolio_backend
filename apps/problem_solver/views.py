@@ -4,7 +4,11 @@ from .serializers import ProblemSerializer, AnswerSerializer, TagSerializer
 
 
 class ProblemViewSet(viewsets.ModelViewSet):
-    queryset = Problem.objects.all().order_by("-created_at")
+    queryset = (
+        Problem.objects.select_related("user")
+        .prefetch_related("tags", "answers", "answers__user")
+        .order_by("-created_at")
+    )
     serializer_class = ProblemSerializer
     permission_classes = [permissions.AllowAny]
 
@@ -12,7 +16,7 @@ class ProblemViewSet(viewsets.ModelViewSet):
 
 
 class AnswerViewSet(viewsets.ModelViewSet):
-    queryset = Answer.objects.all()
+    queryset = Answer.objects.select_related("user", "problem").all()
     serializer_class = AnswerSerializer
     permission_classes = [permissions.AllowAny]
 

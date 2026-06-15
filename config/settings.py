@@ -19,23 +19,26 @@ cloudinary.config(
 
 OPENAI_API_KEY = config("OPENAI_API_KEY", default=None)
 
+# GitHub username for the public activity feed (empty disables the call).
+GITHUB_USERNAME = config("GITHUB_USERNAME", default="")
+
 DEBUG = config("DEBUG", default=False, cast=bool)
 
 ALLOWED_HOSTS = config(
     "ALLOWED_HOSTS",
-    default="irfanalam.com.np",
+    default="irfanalam.com.np,www.irfanalam.com.np,.onrender.com",
     cast=lambda v: [s.strip() for s in v.split(",")]
 )
 
 CSRF_TRUSTED_ORIGINS = config(
     "CSRF_TRUSTED_ORIGINS",
-    default="https://irfanalam.com.np",
+    default="https://irfanalam.com.np,https://www.irfanalam.com.np,https://*.onrender.com",
     cast=lambda v: [s.strip() for s in v.split(",")]
 )
 
 CORS_ALLOWED_ORIGINS = config(
     "CORS_ALLOWED_ORIGINS",
-    default="http://localhost:3000,http://127.0.0.1:3000,https://irfanalam.com.np",
+    default="http://localhost:3000,http://127.0.0.1:3000,https://irfanalam.com.np,https://www.irfanalam.com.np",
     cast=lambda v: [s.strip() for s in v.split(",") if s.strip()],
 )
 
@@ -75,6 +78,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # 🔐 SECURITY
 SECRET_KEY = config("SECRET_KEY", default="dev-secret-key")
+
+# Never ship the insecure dev key to production.
+if not DEBUG and SECRET_KEY == "dev-secret-key":
+    raise RuntimeError("SECRET_KEY must be set via environment in production.")
 
 # LOGGING = {
 #     "version": 1,
@@ -126,6 +133,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "django.middleware.gzip.GZipMiddleware",  # compress API/JSON + HTML responses
     "whitenoise.middleware.WhiteNoiseMiddleware",  # 👈 MUST be here (top)
 
     "corsheaders.middleware.CorsMiddleware",
@@ -225,12 +233,30 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
 # 🧠 DRF CONFIG
+#
+# NOTE: no global default throttle classes. Read endpoints are server-rendered
+# (all SSR requests share the Next.js server IP), so a global AnonRateThrottle
+# would throttle every visitor at once. Instead we apply ScopedRateThrottle only
+# to the write endpoints that are called directly from the browser (real client
+# IPs): the contact form and the AI assistant.
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.AllowAny"
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 20,
+    "DEFAULT_THROTTLE_RATES": {
+        "contact": "5/hour",
+        "ai": "15/hour",
+    },
+}
+
+# 🗃 CACHE (local-memory; swap BACKEND/LOCATION for Redis later via env var)
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "portfolio-cache",
+    }
 }
 
 # 🌍 TIMEZONE

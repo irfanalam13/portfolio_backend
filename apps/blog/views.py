@@ -19,7 +19,12 @@ class TagViewSet(viewsets.ModelViewSet):
 
 
 class PostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.filter(is_published=True).order_by("-created_at")
+    queryset = (
+        Post.objects.filter(is_published=True)
+        .select_related("category")
+        .prefetch_related("tags")
+        .order_by("-created_at")
+    )
     filter_backends = [filters.SearchFilter]
     search_fields = ["title", "content"]
 

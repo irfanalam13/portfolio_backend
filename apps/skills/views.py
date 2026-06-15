@@ -3,7 +3,7 @@ from .models import Skill, SkillCategory
 from .serializers import SkillSerializer, SkillCategorySerializer
 
 class SkillListView(generics.ListAPIView):
-    queryset = Skill.objects.all()
+    queryset = Skill.objects.select_related("category").all()
     serializer_class = SkillSerializer
 
 

@@ -5,6 +5,9 @@ from openai import OpenAI
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.throttling import ScopedRateThrottle
+
+MAX_QUESTION_LENGTH = 500
 
 
 def get_openai_client():
@@ -15,13 +18,22 @@ def get_openai_client():
 
 
 class AskAIView(APIView):
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "ai"
+
     def post(self, request):
-        question = request.data.get("question")
+        question = (request.data.get("question") or "").strip()
 
         # ✅ Validate input
         if not question:
             return Response(
                 {"error": "Question is required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if len(question) > MAX_QUESTION_LENGTH:
+            return Response(
+                {"error": f"Question must be under {MAX_QUESTION_LENGTH} characters."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -48,7 +60,9 @@ Question: {question}
         try:
             response = client.chat.completions.create(
                 model="gpt-4o-mini",
-                messages=[{"role": "user", "content": prompt}]
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=500,
+                timeout=30,
             )
 
             answer = response.choices[0].message.content
