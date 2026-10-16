@@ -39,10 +39,15 @@ ALLOWED_HOSTS = [
     if host.strip()
 ]
 
-CSRF_TRUSTED_ORIGINS = config(
-    "CSRF_TRUSTED_ORIGINS",
-    default="https://irfanalam.com.np,https://www.irfanalam.com.np,https://*.onrender.com",
-    cast=lambda v: [s.strip() for s in v.split(",")]
+CSRF_TRUSTED_ORIGINS = [
+    "https://portfolio-backend-srq8.onrender.com",
+    "https://www.irfanalam.com.np",
+    "https://irfanalam.com.np",
+]
+
+SECURE_PROXY_SSL_HEADER = (
+    "HTTP_X_FORWARDED_PROTO",
+    "https",
 )
 
 CORS_ALLOWED_ORIGINS = config(
@@ -144,17 +149,16 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.middleware.gzip.GZipMiddleware",  # compress API/JSON + HTML responses
     "whitenoise.middleware.WhiteNoiseMiddleware",  # 👈 MUST be here (top)
-
     "corsheaders.middleware.CorsMiddleware",
-
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
-
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+
 
 # 🌐 ROOT URL
 ROOT_URLCONF = "config.urls"
