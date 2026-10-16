@@ -18,11 +18,13 @@ class Achievement(models.Model):
 class Certification(models.Model):
     name = models.CharField(max_length=255)
     organization = models.CharField(max_length=255)
-    issue_date = models.DateField()
+    issue_date = models.DateField(null=True, blank=True)
+    issue_year = models.PositiveSmallIntegerField(null=True, blank=True)
     expiry_date = models.DateField(null=True, blank=True)
     credential_id = models.CharField(max_length=255, blank=True)
     credential_url = models.URLField(blank=True)
     image = models.ImageField(upload_to="certifications/", null=True, blank=True)
+    image_url = models.CharField(max_length=500, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
 

@@ -19,6 +19,8 @@ class Education(models.Model):
     end_date = models.DateField(null=True, blank=True)
 
     description = models.TextField(blank=True)
+    field_of_study = models.CharField(max_length=255, blank=True)
+    location = models.CharField(max_length=255, blank=True)
     grade = models.CharField(max_length=50, blank=True)
 
     logo = models.ImageField(upload_to="education/logos/", null=True, blank=True)

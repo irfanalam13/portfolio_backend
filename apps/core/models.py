@@ -94,3 +94,76 @@ class HomePage(BaseModel):
 
     def __str__(self):
         return "Homepage"
+
+
+class SiteProfile(models.Model):
+    id = models.PositiveSmallIntegerField(primary_key=True, default=1, editable=False)
+    name = models.CharField(max_length=255)
+    username = models.CharField(max_length=100, blank=True)
+    title = models.CharField(max_length=255)
+    headline = models.TextField(blank=True)
+    description = models.TextField(blank=True)
+    location = models.CharField(max_length=255, blank=True)
+    availability_status = models.BooleanField(default=False)
+    availability_text = models.CharField(max_length=255, blank=True)
+    resume_url = models.CharField(max_length=500, blank=True)
+    profile_image_url = models.CharField(max_length=500, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+class SummaryStat(models.Model):
+    title = models.CharField(max_length=255)
+    value = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return self.title
+
+
+class Service(models.Model):
+    slug = models.SlugField(unique=True)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    icon = models.CharField(max_length=100, blank=True)
+    technologies = models.JSONField(default=list, blank=True)
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["order", "title"]
+
+    def __str__(self):
+        return self.title
+
+
+class NavigationLink(models.Model):
+    label = models.CharField(max_length=100)
+    href = models.CharField(max_length=500)
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return self.label
+
+
+class SocialLink(models.Model):
+    name = models.CharField(max_length=100)
+    url = models.URLField(max_length=500, blank=True)
+    icon = models.CharField(max_length=100, blank=True)
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["order", "name"]
+
+    def __str__(self):
+        return self.name

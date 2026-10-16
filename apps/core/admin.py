@@ -5,7 +5,12 @@ from .models import (
     HeroBackground,
     ProfileImage,
     HeroContent,
-    HomePage
+    HomePage,
+    SiteProfile,
+    SummaryStat,
+    Service,
+    NavigationLink,
+    SocialLink,
 )
 
 
@@ -77,4 +82,34 @@ class SEOAdmin(admin.ModelAdmin):
 class HomePageAdmin(admin.ModelAdmin):
     list_display = ["id", "hero", "profile_image", "seo", "created_at"]
     autocomplete_fields = ["hero", "profile_image", "seo"]
+
+
+@admin.register(SiteProfile)
+class SiteProfileAdmin(admin.ModelAdmin):
+    list_display = ["name", "title", "location", "availability_status"]
+
+
+@admin.register(SummaryStat)
+class SummaryStatAdmin(admin.ModelAdmin):
+    list_display = ["title", "value", "order"]
+    list_editable = ["order"]
+
+
+@admin.register(Service)
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = ["title", "slug", "order", "is_active"]
+    list_editable = ["order", "is_active"]
+    prepopulated_fields = {"slug": ["title"]}
+
+
+@admin.register(NavigationLink)
+class NavigationLinkAdmin(admin.ModelAdmin):
+    list_display = ["label", "href", "order", "is_active"]
+    list_editable = ["order", "is_active"]
+
+
+@admin.register(SocialLink)
+class SocialLinkAdmin(admin.ModelAdmin):
+    list_display = ["name", "url", "icon", "order", "is_active"]
+    list_editable = ["order", "is_active"]
 

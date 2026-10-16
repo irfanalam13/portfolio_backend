@@ -4,7 +4,12 @@ from .models import (
     HeroBackground,
     ProfileImage,
     HeroContent,
-    HomePage
+    HomePage,
+    SiteProfile,
+    SummaryStat,
+    Service,
+    NavigationLink,
+    SocialLink,
 )
 
 
@@ -58,6 +63,11 @@ class HomePageSerializer(serializers.ModelSerializer):
     profile_image = ProfileImageSerializer(read_only=True)
 
     background_images = serializers.SerializerMethodField()
+    profile = serializers.SerializerMethodField()
+    summary_stats = serializers.SerializerMethodField()
+    services = serializers.SerializerMethodField()
+    navigation = serializers.SerializerMethodField()
+    social_links = serializers.SerializerMethodField()
 
     class Meta:
         model = HomePage
@@ -67,9 +77,60 @@ class HomePageSerializer(serializers.ModelSerializer):
             "seo",
             "profile_image",
             "background_images",
+            "profile",
+            "summary_stats",
+            "services",
+            "navigation",
+            "social_links",
         ]
 
     def get_background_images(self, obj):
         images = HeroBackground.objects.filter(is_active=True).order_by("order")
         return HeroBackgroundSerializer(images, many=True).data
+
+    def get_profile(self, obj):
+        profile = SiteProfile.objects.first()
+        return SiteProfileSerializer(profile).data if profile else None
+
+    def get_summary_stats(self, obj):
+        return SummaryStatSerializer(SummaryStat.objects.all(), many=True).data
+
+    def get_services(self, obj):
+        return ServiceSerializer(Service.objects.filter(is_active=True), many=True).data
+
+    def get_navigation(self, obj):
+        return NavigationLinkSerializer(NavigationLink.objects.filter(is_active=True), many=True).data
+
+    def get_social_links(self, obj):
+        return SocialLinkSerializer(SocialLink.objects.filter(is_active=True), many=True).data
+
+
+class SiteProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SiteProfile
+        fields = "__all__"
+
+
+class SummaryStatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SummaryStat
+        fields = "__all__"
+
+
+class ServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Service
+        fields = "__all__"
+
+
+class NavigationLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NavigationLink
+        fields = "__all__"
+
+
+class SocialLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SocialLink
+        fields = "__all__"
     

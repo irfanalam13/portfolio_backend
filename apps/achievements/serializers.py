@@ -21,5 +21,5 @@ class CertificationSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_image_url(self, obj):
-        return obj.image.url if obj.image else None
+        return obj.image.url if obj.image else (obj.image_url or None)
     

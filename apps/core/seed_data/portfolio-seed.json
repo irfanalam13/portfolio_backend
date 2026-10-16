@@ -1,0 +1,51 @@
+{
+  "about": {
+    "name": "Irfan Alam",
+    "username": "irfanalam",
+    "title": "Full Stack Developer",
+    "headline": "Building modern web applications with clean architecture and practical solutions.",
+    "description": "I am a Full Stack Developer passionate about building scalable web applications, AI-powered systems, and digital products.",
+    "location": "Nepal",
+    "availability": {"status": true, "text": "Available for opportunities"},
+    "resume": "/resume.pdf",
+    "profileImage": "/profile.png"
+  },
+  "projects": [
+    {
+      "title": "LinguaSync", "slug": "linguasync", "short_description": "AI-powered voice translation system.",
+      "full_description": "An AI-powered voice translation system for multilingual speech translation and speaker-preserved voice processing.",
+      "live_url": "", "github_url": "https://github.com/irfanalam13/LinguaSync", "thumbnail": "/images/projects/linguasync.png",
+      "technologies": ["Python", "PyTorch", "FastAPI", "Whisper", "Transformers"], "meta_title": "LinguaSync | Irfan Alam",
+      "meta_description": "AI-powered voice translation system built with Python and modern machine learning technologies.", "featured": true,
+      "case_study": {"problem": "", "solution": "", "result": ""}
+    },
+    {
+      "title": "Dating Platform", "slug": "dating-platform", "category": "Full Stack",
+      "short_description": "A culturally focused dating platform designed for users in Nepal.",
+      "full_description": "A culturally focused dating platform designed for users in Nepal.", "technologies": ["Next.js", "TypeScript", "Django", "PostgreSQL", "JWT"],
+      "features": ["User Authentication", "Profile Management", "Phone OTP", "JWT Authentication", "Profile Preferences"],
+      "github_url": "https://github.com/yourusername/Dating_Platform", "live_url": "", "thumbnail": "/images/projects/dating-platform.png", "featured": true, "status": "In Development"
+    },
+    {
+      "title": "Personal Digital Wallet", "slug": "digital-wallet", "category": "Full Stack",
+      "short_description": "A personal digital wallet for managing income, expenses and financial records digitally.",
+      "full_description": "A personal digital wallet for managing income, expenses and financial records digitally.", "technologies": ["Next.js", "Django", "PostgreSQL"],
+      "features": ["Income Tracking", "Expense Tracking", "Transaction History", "Financial Dashboard"], "github_url": "", "live_url": "",
+      "thumbnail": "/images/projects/digital-wallet.png", "featured": true, "status": "Planning"
+    }
+  ],
+  "skills": {
+    "frontend": [{"name":"HTML","level":"Advanced"},{"name":"CSS","level":"Advanced"},{"name":"JavaScript","level":"Intermediate"},{"name":"TypeScript","level":"Intermediate"},{"name":"React","level":"Intermediate"},{"name":"Next.js","level":"Intermediate"},{"name":"Tailwind CSS","level":"Intermediate"}],
+    "backend": [{"name":"Python","level":"Intermediate"},{"name":"Django","level":"Intermediate"},{"name":"Django REST Framework","level":"Intermediate"},{"name":"FastAPI","level":"Intermediate"}],
+    "database": [{"name":"PostgreSQL","level":"Intermediate"},{"name":"Redis","level":"Beginner"}],
+    "devops": [{"name":"Docker","level":"Intermediate"},{"name":"Git","level":"Intermediate"},{"name":"GitHub","level":"Intermediate"}],
+    "ai_ml": [{"name":"Python","level":"Intermediate"},{"name":"PyTorch","level":"Beginner"},{"name":"TensorFlow","level":"Beginner"},{"name":"Pandas","level":"Intermediate"},{"name":"NumPy","level":"Intermediate"},{"name":"Scikit-learn","level":"Beginner"}]
+  },
+  "experience": [{"company":"Your Company","position":"Full Stack Developer","type":"Personal / Freelance","location":"Nepal","startDate":"2025","endDate":"Present","description":"Building full-stack web applications using modern frontend and backend technologies.","technologies":["Next.js","React","Django","PostgreSQL"]}],
+  "education": [{"institution":"Your Institution","degree":"Bachelor's Degree","field":"Business Studies","startYear":"2026","endYear":"","status":"Currently Studying","location":"Nepal"}],
+  "summary_stats": [{"title":"Full Stack Projects","value":"10+","description":"Projects built across web development and AI."},{"title":"Technologies","value":"20+","description":"Technologies and tools explored through projects."},{"title":"GitHub Projects","value":"10+","description":"Open-source and personal development projects."}],
+  "certifications": [{"name":"Certification Name","issuer":"Organization Name","issueDate":"2026","credentialId":"","credentialUrl":"","image":"/images/certifications/certificate-1.png"}],
+  "navigation": [{"label":"Home","href":"/"},{"label":"About","href":"/about"},{"label":"Skills","href":"/skills"},{"label":"Projects","href":"/projects"},{"label":"Experience","href":"/experience"},{"label":"Education","href":"/education"},{"label":"Contact","href":"/contact"}],
+  "services": [{"id":"web-development","title":"Web Development","description":"Building modern, responsive and scalable web applications.","icon":"code","technologies":["React","Next.js","Django","PostgreSQL"]},{"id":"api-development","title":"API Development","description":"Designing secure and scalable REST APIs for modern applications.","icon":"server","technologies":["Django REST Framework","FastAPI","PostgreSQL"]},{"id":"ai-ml","title":"AI & Machine Learning","description":"Developing practical AI and machine learning solutions.","icon":"brain","technologies":["Python","PyTorch","TensorFlow","Scikit-learn"]}],
+  "social_links": [{"name":"GitHub","url":"https://github.com/yourusername","icon":"github"},{"name":"LinkedIn","url":"https://www.linkedin.com/in/yourusername","icon":"linkedin"},{"name":"Facebook","url":"https://facebook.com/yourusername","icon":"facebook"},{"name":"Instagram","url":"https://instagram.com/yourusername","icon":"instagram"}]
+}

@@ -9,6 +9,9 @@ class Experience(models.Model):
     end_date = models.DateField(null=True, blank=True)
 
     is_current = models.BooleanField(default=False)
+    employment_type = models.CharField(max_length=100, blank=True)
+    location = models.CharField(max_length=255, blank=True)
+    technologies = models.JSONField(default=list, blank=True)
 
     company_logo = models.ImageField(upload_to="experience/logos/", null=True, blank=True)
 

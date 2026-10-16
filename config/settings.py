@@ -1,13 +1,7 @@
 from pathlib import Path
 from decouple import config
 import dj_database_url
-
-
-# settings.py
-
 import cloudinary
-
-# 🔐 Cloudinary config (use ENV variables - BEST PRACTICE)
 
 cloudinary.config(
     cloud_name=config("CLOUDINARY_CLOUD_NAME"),
@@ -15,7 +9,20 @@ cloudinary.config(
     api_secret=config("CLOUDINARY_API_SECRET"),
 )
 
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": config("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": config("CLOUDINARY_API_KEY"),
+    "API_SECRET": config("CLOUDINARY_API_SECRET"),
+}
 
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 OPENAI_API_KEY = config("OPENAI_API_KEY", default=None)
 
@@ -204,22 +211,6 @@ AUTH_USER_MODEL = "auth.User"  # update later if custom
 # ================================
 # ☁️ MEDIA FILES (Cloudinary)
 # ================================
-
-# Django 5.1+ removed DEFAULT_FILE_STORAGE / STATICFILES_STORAGE in favour of
-# the unified STORAGES dict. On Django 6 the legacy settings are ignored, so
-# media (Cloudinary) and static (WhiteNoise) backends MUST be declared here.
-STORAGES = {
-    "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
-
-# ❌ DO NOT use these with Cloudinary
-# MEDIA_URL = "/media/"
-# MEDIA_ROOT = BASE_DIR / "media"
 
 
 

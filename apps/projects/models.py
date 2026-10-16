@@ -21,7 +21,13 @@ class Project(models.Model):
     meta_description = models.TextField(blank=True)
 
     # Media
-    thumbnail = models.ImageField(upload_to='projects/')
+    thumbnail = models.ImageField(upload_to='projects/', blank=True, null=True)
+    thumbnail_url = models.CharField(max_length=500, blank=True)
+    technologies = models.JSONField(default=list, blank=True)
+    category = models.CharField(max_length=100, blank=True)
+    features = models.JSONField(default=list, blank=True)
+    status = models.CharField(max_length=100, blank=True)
+    case_study = models.JSONField(default=dict, blank=True)
     featured = models.BooleanField(default=False)
 
     # Dates

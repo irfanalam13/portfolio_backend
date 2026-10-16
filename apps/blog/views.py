@@ -6,16 +6,19 @@ from .serializers import (
     CategorySerializer,
     TagSerializer
 )
+from apps.core.permissions import IsAdminOrReadOnly
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = [IsAdminOrReadOnly]
 
 
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
+    permission_classes = [IsAdminOrReadOnly]
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -27,6 +30,7 @@ class PostViewSet(viewsets.ModelViewSet):
     )
     filter_backends = [filters.SearchFilter]
     search_fields = ["title", "content"]
+    permission_classes = [IsAdminOrReadOnly]
 
     def get_serializer_class(self):
         if self.action in ["create", "update", "partial_update"]:

@@ -13,6 +13,7 @@ class Skill(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
     level = models.IntegerField(help_text="0 to 100")
+    level_label = models.CharField(max_length=30, blank=True)
     category = models.ForeignKey(SkillCategory, on_delete=models.CASCADE, related_name="skills")
 
     def __str__(self):
